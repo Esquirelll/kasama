@@ -1,8 +1,15 @@
+# Builds the site and publishes it to GitHub Pages.
+#
+# WHEN IT RUNS: every time you push to the "main" branch, and whenever
+# you click "Run workflow" on the repo's Actions tab.
+# WHAT IT DOES: installs the project, runs `npm run build`, and uploads
+# the resulting dist/ folder as your live website.
+# HOW YOU KNOW IT WORKED: a green check next to the run in the Actions tab.
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: ['main']
   workflow_dispatch:
 
 permissions:
@@ -11,36 +18,45 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: 'pages'
   cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-      - run: npm ci
-      # The site lives at https://<you>.github.io/<repo-name>/ so the build needs that base path.
-      # (If your repo is named <you>.github.io, change the next line to VITE_BASE: /)
-      - run: npm run build
-        env:
-          VITE_BASE: /${{ github.event.repository.name }}/
-      # GitHub Pages has no server routing: a copy of index.html as 404.html lets links like /home?country=laos open directly.
-      - run: cp dist/index.html dist/404.html
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
   deploy:
-    needs: build
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: lts/*
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      # The link-preview image (Messenger, Slack, etc.) must be a full
+      # web address. This fills in yours from the repo's own name, so you
+      # never have to type it.
+      - name: Point social-preview image at the live site
+        run: |
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          SITE="https://${OWNER}.github.io/${{ github.event.repository.name }}"
+          sed -i "s#content=\"/og-image.jpg\"#content=\"${SITE}/og-image.jpg\"#g" index.html
+      # BASE_PATH tells Vite the site lives in a folder named after the
+      # repo (see vite.config.ts), so images, scripts and routes all work.
+      - name: Build
+        run: npm run build
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+      - name: Setup Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: './dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
