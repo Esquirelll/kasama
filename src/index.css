@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom fonts from the mockup (Alta, Barabara, Moontime). The font files are not in the project yet, so these rules are switched off
+   to avoid failed downloads. When you have the files: put them in public/fonts/ and remove the comment marks around this block.
+@font-face {
+  font-family: 'Alta';
+  src: url('/fonts/Alta.woff2') format('woff2'), url('/fonts/Alta.ttf') format('truetype'), url('/fonts/Alta.otf') format('opentype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Barabara';
+  src: url('/fonts/Barabara.woff2') format('woff2'), url('/fonts/Barabara.ttf') format('truetype'), url('/fonts/Barabara.otf') format('opentype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Moontime';
+  src: url('/fonts/Moontime.woff2') format('woff2'), url('/fonts/Moontime.ttf') format('truetype'), url('/fonts/Moontime.otf') format('opentype');
+  font-display: swap;
+}
+
+*/
+
+@layer base {
+  /* One fluid size for the whole site: everything is in rem, so it grows with the screen (16px phones to 21px big monitors). */
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; font-size: clamp(16px, 0.62vw + 10px, 21px); }
+  html, body, #root { min-height: 100%; }
+  body { @apply bg-slate-main text-white font-body antialiased; font-size: 1.0625rem; line-height: 1.65; }
+  input:-webkit-autofill, input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #FCFCFC;
+    caret-color: #FCFCFC;
+    box-shadow: 0 0 0 1000px #0C243C inset;
+    transition: background-color 9999s ease-out 0s;
+  }
+  ::selection { background: theme('colors.gold'); color: theme('colors.navy-deep'); }
+  :focus-visible { outline: 2px solid theme('colors.gold'); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .text-shadow-soft { text-shadow: 0 2px 10px rgb(12 36 60 / 0.75), 0 1px 2px rgb(12 36 60 / 0.6); }
+  .text-shadow-none { text-shadow: none; }
+}
+
+/* Fine film grain so flat color areas feel like paper, not a screen. */
+.grain { position: relative; }
+.grain::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
