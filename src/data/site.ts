@@ -3,7 +3,7 @@
  * so what you search for is exactly what is shown. Change a line here and it changes everywhere.
  */
 export const SITE = {
-  nav: { search: 'Search…', home: 'Home', about: 'About', contact: 'Contact', book: 'Book', other: 'Other', signUp: 'Sign up', logOut: 'Log out' },
+  nav: { search: 'Search…', home: 'Home', about: 'About', contact: 'Contact', book: 'Book', signUp: 'Sign up', logOut: 'Log out' },
   hero: {
     url: 'www.kasamatourismo.com',
     tagline: 'Travel with a Kasama',
@@ -19,7 +19,7 @@ export const SITE = {
   about: {
     eyebrow: 'Who we are',
     title: 'About us',
-    blurb: 'Kasama helps Filipino first-time travelers plan a trip to Southeast Asia: entry rules, money, getting around, where to stay, and what to watch out for.',
+    blurb: 'Kasama Tourismo is a trusted travel companion in discovering the beauty and ways of Southeast Asia. We provide reliable travel guides and information of each country\'s required travel entries, how to manage expenses, to finding accommodations. We make travel planning easier for our Filipinos bearing a Philippine passport. With Kasama Tourismo, we guide you every step of the way.',
     features: [
       { key: 'safety', label: 'Safety', text: 'Common scams and emergency numbers for every country we cover.' },
       { key: 'support', label: 'Support', text: 'Tourist protection rules, and who to call when something goes wrong.' },
@@ -51,7 +51,7 @@ export const SITE = {
     eyebrow: 'Say hello',
     title: 'Contact us',
     items: [
-      { key: 'phone', label: 'Call us', value: '+63 012 3456' },
+      { key: 'phone', label: 'Call us', value: '+63 901 234 5678' },
       { key: 'email', label: 'Email', value: 'Kasamatourismo@gmail.com' },
       { key: 'social', label: 'Social', value: '@kasamatourismocial' },
     ],
